@@ -106,7 +106,39 @@ new SlashCommandBuilder()
         option
             .setName('монеты')
             .setDescription('Сколько поставить')
+            .setRequired(true)),
+new SlashCommandBuilder()
+    .setName('рулетка')
+    .setDescription('Сыграть в рулетку')
+    .addStringOption(option =>
+        option
+            .setName('цвет')
+            .setDescription('Выберите цвет')
+            .setRequired(true)
+            .addChoices(
+                { name: '🔴 Красное', value: 'red' },
+                { name: '⚫ Черное', value: 'black' },
+                { name: '🟢 Зеленое', value: 'green' }
+            ))
+    .addIntegerOption(option =>
+        option
+            .setName('монеты')
+            .setDescription('Сколько поставить')
+            .setRequired(true)),
+new SlashCommandBuilder()
+    .setName('выдать')
+    .setDescription('Выдать монеты')
+    .addUserOption(option =>
+        option
+            .setName('пользователь')
+            .setDescription('Кому выдать')
             .setRequired(true))
+    .addIntegerOption(option =>
+        option
+            .setName('монеты')
+            .setDescription('Количество')
+            .setRequired(true))
+
 
 ].map(command => command.toJSON());
 

@@ -2,7 +2,7 @@ require('dotenv').config();
 
 const fs = require('fs');
 const voiceTimes = {};
-
+const OWNER_ID = "962043905786908742";
 function loadCoins() {
     if (!fs.existsSync('./coins.json')) {
         fs.writeFileSync('./coins.json', '{}');
@@ -437,6 +437,113 @@ if (interaction.commandName === "магазин") {
 
 }
 
+if (interaction.commandName === "рулетка") {
+
+    console.log("Рулетка запущена");
+
+if (interaction.user.id !== OWNER_ID) {
+    return interaction.reply({
+        content: "❌ Команда временно доступна только владельцу.",
+        ephemeral: true
+    });
+}
+
+    const color =
+        interaction.options.getString("цвет");
+
+    const amount =
+        interaction.options.getInteger("монеты");
+
+    if (amount < 50) {
+        return interaction.reply({
+            content: "❌ Минимальная ставка — 50 🪙",
+            ephemeral: true
+        });
+    }
+
+    const coins = loadCoins();
+
+    if (!coins[interaction.user.id]) {
+        coins[interaction.user.id] = {
+            coins: 0,
+            lastDaily: 0
+        };
+    }
+
+    if (coins[interaction.user.id].coins < amount) {
+        return interaction.reply({
+            content: "❌ Недостаточно монет.",
+            ephemeral: true
+        });
+    }
+
+    const roll = Math.random();
+
+    let result;
+
+    if (roll < 0.475) {
+        result = "red";
+    } else if (roll < 0.95) {
+        result = "black";
+    } else {
+        result = "green";
+    }
+
+    coins[interaction.user.id].coins -= amount;
+
+    let win = 0;
+
+    if (color === result) {
+
+        if (result === "green") {
+            win = amount * 14;
+        } else {
+            win = amount * 2;
+        }
+
+        coins[interaction.user.id].coins += win;
+
+        saveCoins(coins);
+
+        return interaction.reply({
+            content:
+`🎰 РУЛЕТКА
+
+Шарик остановился на:
+
+${result === "red" ? "🔴 Красном" :
+result === "black" ? "⚫ Черном" :
+"🟢 Зеленом"}
+
+🎉 Вы выиграли!
+
+💰 Выигрыш: ${win} 🪙
+💳 Баланс: ${coins[interaction.user.id].coins} 🪙`,
+        });
+
+    }
+
+    saveCoins(coins);
+
+    return interaction.reply({
+        content:
+`🎰 РУЛЕТКА
+
+Шарик остановился на:
+
+${result === "red" ? "🔴 Красном" :
+result === "black" ? "⚫ Черном" :
+"🟢 Зеленом"}
+
+💥 Вы проиграли!
+
+💸 Потеряно: ${amount} 🪙
+💳 Баланс: ${coins[interaction.user.id].coins} 🪙`,
+ephemeral: true
+    });
+
+}
+
 if (interaction.commandName === "баланс") {
 
     const coins = loadCoins();
@@ -525,9 +632,11 @@ if (amount < 50) {
 
     const chance = Math.random();
 
-    if (chance < 0.40) {
+   coins[interaction.user.id].coins -= amount;
 
-        coins[interaction.user.id].coins += amount * 2;
+if (chance < 0.40) {
+
+    coins[interaction.user.id].coins += amount * 2;
 
         saveCoins(coins);
 
@@ -564,6 +673,42 @@ if (amount < 50) {
 
     }
 
+}
+
+if (interaction.commandName === "выдать") {
+
+    if (interaction.user.id !== OWNER_ID) {
+        return interaction.reply({
+            content: "❌ Только владелец может использовать эту команду.",
+            ephemeral: true
+        });
+    }
+
+    const user =
+        interaction.options.getUser("пользователь");
+
+    const amount =
+        interaction.options.getInteger("монеты");
+
+    const coins = loadCoins();
+
+    if (!coins[user.id]) {
+        coins[user.id] = {
+            coins: 0,
+            lastDaily: 0
+        };
+    }
+
+    coins[user.id].coins += amount;
+
+    saveCoins(coins);
+
+    return interaction.reply({
+        content:
+            `✅ Выдано ${amount} 🪙 пользователю ${user}\n` +
+            `Новый баланс: ${coins[user.id].coins} 🪙`,
+        ephemeral: true
+    });
 }
 
 if (interaction.commandName === "ежедневка") {
