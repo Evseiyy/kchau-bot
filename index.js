@@ -14,6 +14,24 @@ function loadCoins() {
     );
 }
 
+function getFarmXpRequired(level) {
+
+    const xpTable = {
+        0: 100,
+        1: 200,
+        2: 400,
+        3: 800,
+        4: 1600,
+        5: 2000,
+        6: 2500,
+        7: 3000,
+        8: 3500,
+        9: 4000
+    };
+
+    return xpTable[level] || 4000;
+}
+
 function saveCoins(data) {
     fs.writeFileSync(
         './coins.json',
@@ -312,28 +330,87 @@ if (interaction.commandName === "ферма") {
 
     if (!coins[userId]) {
         coins[userId] = {
-            coins: 0,
-            lastDaily: 0
-        };
-    }
+    coins: 0,
+    lastDaily: 0,
+    farmXp: 0,
+    farmLevel: 0
+   };
+ }
 
-    const reward =
-        Math.floor(Math.random() * 5) + 1;
+    const level =
+    coins[userId].farmLevel || 0;
+
+const minReward =
+    1 + level;
+
+const maxReward =
+    5 + level;
+
+const reward =
+    Math.floor(
+        Math.random() *
+        (maxReward - minReward + 1)
+    ) + minReward;
 
     coins[userId].coins += reward;
+coins[userId].farmXp += 1;
+
+let levelUpMessage = "";
+
+const requiredXp =
+    getFarmXpRequired(
+        coins[userId].farmLevel
+    );
+
+if (
+    coins[userId].farmLevel < 10 &&
+    coins[userId].farmXp >= requiredXp
+) {
+
+    coins[userId].farmLevel++;
+    coins[userId].farmXp = 0;
+
+    if (coins[userId].farmLevel === 10) {
+
+        await interaction.member.roles.add("1521872300696404039");
+
+        levelUpMessage =
+`\n\n👑 Поздравляем!
+
+Вы достигли максимального уровня фермы!
+
+Получена роль:
+👑 Король урожая`;
+
+    } else {
+
+        levelUpMessage =
+`\n\n🎉 Новый уровень фермы!
+
+🚜 Уровень:
+${coins[userId].farmLevel}/10`;
+
+    }
+}
 
     saveCoins(coins);
 
     return interaction.reply({
-        content:
+    content:
 `🌾 Урожай собран!
 
 💰 Получено: ${reward} 🪙
 
-💳 Баланс: ${coins[userId].coins} 🪙`,
-        ephemeral: true
-    });
-}
+🚜 Уровень:
+${coins[userId].farmLevel}/10
+
+⭐ Опыт:
+${coins[userId].farmXp}/${getFarmXpRequired(coins[userId].farmLevel)}
+
+💳 Баланс:
+${coins[userId].coins} 🪙${levelUpMessage}`,
+    ephemeral: true
+});
 
 if (interaction.commandName === "купить") {
 
@@ -611,6 +688,37 @@ result === "black" ? "⚫ Черном" :
 ephemeral: true
     });
 
+}
+
+if (interaction.commandName === "фермапрофиль") {
+
+    const userId = interaction.user.id;
+
+    const coins = loadCoins();
+
+    if (!coins[userId]) {
+        coins[userId] = {
+            coins: 0,
+            lastDaily: 0,
+            farmXp: 0,
+            farmLevel: 0
+        };
+    }
+
+    return interaction.reply({
+        content:
+`🌾 ФЕРМЕРСКИЙ ПРОФИЛЬ
+
+🚜 Уровень:
+${coins[userId].farmLevel}/10
+
+⭐ Опыт:
+${coins[userId].farmXp}/${getFarmXpRequired(coins[userId].farmLevel)}
+
+💰 Доход:
+${1 + coins[userId].farmLevel}-${5 + coins[userId].farmLevel} 🪙`,
+        ephemeral: true
+    });
 }
 
 if (interaction.commandName === "баланс") {
