@@ -692,6 +692,13 @@ ephemeral: true
 
 if (interaction.commandName === "фермапрофиль") {
 
+if (interaction.user.id !== OWNER_ID) {
+    return interaction.reply({
+        content: "❌ Команда временно недоступна.",
+        ephemeral: true
+    });
+}
+
     const userId = interaction.user.id;
 
     const coins = loadCoins();

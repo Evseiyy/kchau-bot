@@ -148,7 +148,10 @@ new SlashCommandBuilder()
             .setRequired(true)),
 new SlashCommandBuilder()
     .setName('ферма')
-    .setDescription('Собрать урожай')
+    .setDescription('Собрать урожай'),
+new SlashCommandBuilder()
+    .setName('фермапрофиль')
+    .setDescription('Показать профиль фермы')
 
 
 ].map(command => command.toJSON());
