@@ -706,6 +706,21 @@ if (interaction.user.id !== OWNER_ID) {
 
     const coins = loadCoins();
 
+if (!coins[userId]) {
+    coins[userId] = {
+        coins: 0,
+        lastDaily: 0,
+        farmXp: 0,
+        farmLevel: 0
+    };
+}
+
+if (coins[userId].farmXp === undefined)
+    coins[userId].farmXp = 0;
+
+if (coins[userId].farmLevel === undefined)
+    coins[userId].farmLevel = 0;
+
     if (!coins[userId]) {
         coins[userId] = {
             coins: 0,
