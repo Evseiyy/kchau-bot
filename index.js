@@ -946,6 +946,8 @@ if (interaction.commandName === "ежедневка") {
 
 }
 
+}
+
 catch (error) {
 
     console.error(error);
