@@ -439,15 +439,6 @@ if (interaction.commandName === "магазин") {
 
 if (interaction.commandName === "рулетка") {
 
-    console.log("Рулетка запущена");
-
-if (interaction.user.id !== OWNER_ID) {
-    return interaction.reply({
-        content: "❌ Команда временно доступна только владельцу.",
-        ephemeral: true
-    });
-}
-
     const color =
         interaction.options.getString("цвет");
 
