@@ -312,6 +312,7 @@ if (interaction.commandName === "ферма") {
             content: "❌ Команда временно недоступна.",
             ephemeral: true
         });
+
     }
 
     if (
@@ -411,6 +412,8 @@ ${coins[userId].farmXp}/${getFarmXpRequired(coins[userId].farmLevel)}
 ${coins[userId].coins} 🪙${levelUpMessage}`,
     ephemeral: true
 });
+
+}
 
 if (interaction.commandName === "купить") {
 
