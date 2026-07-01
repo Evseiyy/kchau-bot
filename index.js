@@ -329,12 +329,6 @@ if (interaction.commandName === "ферма") {
 
     const coins = loadCoins();
 
-if (coins[userId].farmXp === undefined)
-    coins[userId].farmXp = 0;
-
-if (coins[userId].farmLevel === undefined)
-    coins[userId].farmLevel = 0;
-
     if (!coins[userId]) {
         coins[userId] = {
     coins: 0,
@@ -419,14 +413,6 @@ ${coins[userId].coins} 🪙${levelUpMessage}`,
     ephemeral: true
 });
 
-}
-
-if (coins[userId].farmXp === undefined) {
-    coins[userId].farmXp = 0;
-}
-
-if (coins[userId].farmLevel === undefined) {
-    coins[userId].farmLevel = 0;
 }
 
 if (interaction.commandName === "купить") {
@@ -963,8 +949,6 @@ if (interaction.commandName === "ежедневка") {
         " 🪙**",
     ephemeral: true
 });
-
-}
 
 }
 
