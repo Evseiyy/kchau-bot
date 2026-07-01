@@ -437,6 +437,33 @@ if (interaction.commandName === "магазин") {
 
 }
 
+if (interaction.commandName === "очистить") {
+
+    const amount =
+        interaction.options.getInteger("количество");
+
+if (!interaction.member.permissions.has("ManageMessages")) {
+    return interaction.reply({
+        content: "❌ У вас нет прав.",
+        ephemeral: true
+    });
+}
+
+    if (amount < 1 || amount > 100) {
+        return interaction.reply({
+            content: "❌ Можно удалить от 1 до 100 сообщений.",
+            ephemeral: true
+        });
+    }
+
+    await interaction.channel.bulkDelete(amount, true);
+
+    return interaction.reply({
+        content: `✅ Удалено ${amount} сообщений.`,
+        ephemeral: true
+    });
+}
+
 if (interaction.commandName === "рулетка") {
 
     const color =

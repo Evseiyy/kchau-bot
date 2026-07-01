@@ -137,6 +137,14 @@ new SlashCommandBuilder()
         option
             .setName('монеты')
             .setDescription('Количество')
+            .setRequired(true)),
+new SlashCommandBuilder()
+    .setName('очистить')
+    .setDescription('Удалить сообщения')
+    .addIntegerOption(option =>
+        option
+            .setName('количество')
+            .setDescription('Сколько сообщений удалить')
             .setRequired(true))
 
 
