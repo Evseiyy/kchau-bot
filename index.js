@@ -942,8 +942,6 @@ if (interaction.commandName === "ежедневка") {
 });
 
 }
-}
-
 
 catch (error) {
 
