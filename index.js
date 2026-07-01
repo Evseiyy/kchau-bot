@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const farmCooldowns = {};
 const fs = require('fs');
 const voiceTimes = {};
 const OWNER_ID = "962043905786908742";
@@ -282,6 +283,56 @@ if (interaction.commandName === "выговор") {
 🚫 Строгих: ${strictCount}/2`
     });
 
+}
+
+if (interaction.commandName === "ферма") {
+
+    const userId = interaction.user.id;
+
+    if (interaction.user.id !== OWNER_ID) {
+        return interaction.reply({
+            content: "❌ Команда временно недоступна.",
+            ephemeral: true
+        });
+    }
+
+    if (
+        farmCooldowns[userId] &&
+        Date.now() - farmCooldowns[userId] < 3000
+    ) {
+        return interaction.reply({
+            content: "⏳ Подождите 3 секунды.",
+            ephemeral: true
+        });
+    }
+
+    farmCooldowns[userId] = Date.now();
+
+    const coins = loadCoins();
+
+    if (!coins[userId]) {
+        coins[userId] = {
+            coins: 0,
+            lastDaily: 0
+        };
+    }
+
+    const reward =
+        Math.floor(Math.random() * 5) + 1;
+
+    coins[userId].coins += reward;
+
+    saveCoins(coins);
+
+    return interaction.reply({
+        content:
+`🌾 Урожай собран!
+
+💰 Получено: ${reward} 🪙
+
+💳 Баланс: ${coins[userId].coins} 🪙`,
+        ephemeral: true
+    });
 }
 
 if (interaction.commandName === "купить") {

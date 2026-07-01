@@ -145,7 +145,10 @@ new SlashCommandBuilder()
         option
             .setName('количество')
             .setDescription('Сколько сообщений удалить')
-            .setRequired(true))
+            .setRequired(true)),
+new SlashCommandBuilder()
+    .setName('ферма')
+    .setDescription('Собрать урожай')
 
 
 ].map(command => command.toJSON());
