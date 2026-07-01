@@ -952,7 +952,8 @@ if (interaction.commandName === "ежедневка") {
 
 }
 
-catch (error) {
+
+} catch (error) {
 
     console.error(error);
 
@@ -976,6 +977,7 @@ client.on(Events.InteractionCreate, async interaction => {
     const roleData = SHOP_ROLES[interaction.values[0]];
 
     const coins = loadCoins();
+
 
     if (!coins[interaction.user.id]) {
         coins[interaction.user.id] = {
