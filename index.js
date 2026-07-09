@@ -305,16 +305,6 @@ if (interaction.commandName === "выговор") {
 
 if (interaction.commandName === "ферма") {
 
-    const userId = interaction.user.id;
-
-    if (interaction.user.id !== OWNER_ID) {
-        return interaction.reply({
-            content: "❌ Команда временно недоступна.",
-            ephemeral: true
-        });
-
-    }
-
     if (
         farmCooldowns[userId] &&
         Date.now() - farmCooldowns[userId] < 3000
@@ -700,13 +690,6 @@ ephemeral: true
 }
 
 if (interaction.commandName === "фермапрофиль") {
-
-if (interaction.user.id !== OWNER_ID) {
-    return interaction.reply({
-        content: "❌ Команда временно недоступна.",
-        ephemeral: true
-    });
-}
 
     const userId = interaction.user.id;
 
