@@ -305,6 +305,8 @@ if (interaction.commandName === "выговор") {
 
 if (interaction.commandName === "ферма") {
 
+    const userId = interaction.user.id;
+
     if (
         farmCooldowns[userId] &&
         Date.now() - farmCooldowns[userId] < 3000
